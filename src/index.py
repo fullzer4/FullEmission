@@ -1,9 +1,18 @@
-from flask import Flask
-hello = Flask(__name__)
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+import pandas_datareader as web
+import datetime as dt
 
-@hello.route("/")
-def run():
-    return "sucess"
+from sklearn.preprocessing import minmax_scale
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, LSTM
 
-if __name__ == "__main__":
-    hello.run(host="0.0.0.0", port=int("3000"), debug=True)
+empresa = 'FB'
+
+inicio = dt.datetime(2012,1,1)
+final = dt.datetime(2020,1,1)
+
+dados = web.DataReader(empresa, 'yahoo', inicio, final)
+
+print(dados)
