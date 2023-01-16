@@ -1,14 +1,16 @@
 import pandas as pd
 import torch
 import torch.nn as nn
-import numpy as np
 import matplotlib.pyplot as plt
 
 # Preparando os dados
-df = pd.read_csv("./FuelConsumption.csv")
+df = pd.read_csv("./Model/data/FuelConsumption.csv")
 
 x_train = df[["ENGINESIZE", "CYLINDERS", "FUELCONSUMPTION_COMB"]].values
 y_train = df["CO2EMISSIONS"].values
+
+y_train_mean = y_train.mean()
+y_train_std = y_train.std()
 
 # Normalizando os dados
 x_train = (x_train - x_train.mean()) / x_train.std()
@@ -38,7 +40,7 @@ criterion = nn.MSELoss()
 optimizer = torch.optim.SGD(model.parameters(), lr=0.001)
 
 # Loop de treino do modelo
-epochs = 500000
+epochs = 10000
 
 for epoch in range(epochs):
     optimizer.zero_grad()
