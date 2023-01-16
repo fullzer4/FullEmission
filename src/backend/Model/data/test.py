@@ -1,9 +1,11 @@
 import pandas as pd
 
-df = pd.read_csv("./data4.csv")
-df['Cn'] = df['Cn'].factorize()[0]
-df['Ct'] = df['Ct'].factorize()[0]
-df.to_csv("data5.csv", index=False)
+df = pd.read_csv("E:\dataFiles\CO2EmissionFiles\data.csv")
+
+df = df.sample(frac=0.5) #fracao dos dados
+#df = df.drop(columns=[]) # remover colunas
+
+df.to_csv("data2.csv", index=False)
 
 print(df.head())
 
