@@ -1,65 +1,93 @@
 import pandas as pd
 import torch
 import torch.nn as nn
+from torch import device
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import r2_score, mean_squared_error
+from torch.utils.data import TensorDataset, DataLoader
 
-# Preparando os dados
-df = pd.read_csv("./Model/data/data4.csv") # Avg Engine Power (kW) Avg Engine Capacity (cm3)
+# Device
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print(f'Using: {device}')
 
-# Remover linhas com valores nulos
-df = df.dropna()
-df['Cn'] = df['Cn'].factorize()[0]
-df['Ct'] = df['Ct'].factorize()[0]
-x_train = df[["ec (cm3)", "Cn", "Ct"]].values
-y_train = df["Ewltp (g/km)"].values
+# Prepare the data
+df = pd.read_csv("./data/data6.csv") 
+x = df[['m (kg)', 'Mt', 'W (mm)', 'At1 (mm)', 'At2 (mm)', 'ec (cm3)', 'ep (KW)', 'Fuel consumption']].values
+y = df["Ewltp (g/km)"].values
 
-y_train_mean = y_train.mean()
-y_train_std = y_train.std()
+# Splitting the data into training, validation, and testing sets
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
 
-# Normalizando os dados
-x_train = (x_train - x_train.mean()) / x_train.std()
-y_train = (y_train - y_train.mean()) / y_train.std()
+# Normalizing the data
+x_train_mean = x_train.mean(axis=0)
+x_train_std = x_train.std(axis=0)
+x_train = (x_train - x_train_mean) / x_train_std
+x_test = (x_test - x_train_mean) / x_train_std
 
-# Convertendo para tensores
-x_train = torch.from_numpy(x_train).float()
-y_train = torch.from_numpy(y_train).float()
+# Convert to tensors
+x_train = torch.from_numpy(x_train).float().to(device)
+y_train = torch.from_numpy(y_train).float().to(device)
+x_test = torch.from_numpy(x_test).float().to(device)
+y_test = torch.from_numpy(y_test).float().to(device)
 
-# Input e Output
-input_dim = 4
-output_dim = 1
-
-# Model neural
-class RegressaoLinear(nn.Module):
+# Define the model
+class LinearRegression(nn.Module):
     def __init__(self, input_dim, output_dim):
-        super(RegressaoLinear, self).__init__()
-        self.linear1 = nn.Linear(input_dim, 8)
-        self.relu1 = nn.ReLU()
-        self.linear2 = nn.Linear(8, 8)
-        self.relu2 = nn.ReLU()
-        self.linear3 = nn.Linear(8, output_dim)
+        super(LinearRegression, self).__init__()
+        self.linear = nn.Linear(input_dim, output_dim)
+
     def forward(self, x):
-        x = self.linear1(x)
-        x = self.relu1(x)
-        x = self.linear2(x)
-        x = self.relu2(x)
-        x = self.linear3(x)
+        x = self.linear(x)
         return x
 
-model = RegressaoLinear(input_dim, output_dim)
+# Initialize the model
+input_dim = 8
+output_dim = 1
+model = LinearRegression(input_dim, output_dim).to(device)
 
-# Loss / OLptimizer
+# Define the loss function and optimizer
 criterion = nn.MSELoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
 
-# Loop de treino do modelo
-epochs = 1500
+# Create TensorDatasets for training and testing
+train_data = TensorDataset(x_train, y_train)
+test_data = TensorDataset(x_test, y_test)
 
-for epoch in range(epochs):
-    optimizer.zero_grad()
-    y_pred = model(x_train)
-    loss = criterion(y_pred, y_train)
-    loss.backward()
-    optimizer.step()
-    if (epoch+1) % 10 == 0:
-        print(f'epoch {epoch+1}, loss = {loss.item()}')
+# Define the batch size
+batch_size = 32
 
-torch.save(model.state_dict(), 'model.pt')
+# Create DataLoaders for training and testing
+train_loader = DataLoader(train_data, batch_size=batch_size, shuffle=True)
+test_loader = DataLoader(test_data, batch_size=batch_size, shuffle=True)
+
+# Train the model
+num_epochs = 1500
+for epoch in range(num_epochs):
+    for i, (x_batch, y_batch) in enumerate(train_loader):
+        # Forward pass
+        outputs = model(x_batch)
+        loss = criterion(outputs, y_batch)
+
+        # Backward and optimize
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+        
+        if (i+1) % 10 == 0:
+            print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}')
+            
+# Test the model
+with torch.no_grad():
+    total_loss = 0
+    total_mse = 0
+    total_r2 = 0
+    total_len = len(test_loader)
+    for i, (x_batch, y_batch) in enumerate(test_loader):
+        # reshape y_batch to [batch_size, 1]
+        y_batch = y_batch.reshape(-1,1)
+        outputs = model(x_batch)
+        loss = criterion(outputs, y_batch)
+        total_loss += loss.item()
+        total_mse += mean_squared_error(y_batch.cpu(), outputs.cpu())
+        total_r2 += r2_score(y_batch.cpu(), outputs.cpu())
+    print(f'R²: {total_r2/total_len:.4f}, MSE: {total_mse/total_len:.4f} and Loss: {total_loss/total_len:.4f}')
