@@ -1,0 +1,1 @@
+Codigo: v1 | Resultados treino 1500 epochs - R²: 0.0064, MSE: 1307.8274 and Loss: 1307.8274 | pessimo

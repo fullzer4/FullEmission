@@ -11,9 +11,9 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f'Using: {device}')
 
 # Prepare the data
-df = pd.read_csv("./data/data6.csv") 
-x = df[['m (kg)', 'Mt', 'W (mm)', 'At1 (mm)', 'At2 (mm)', 'ec (cm3)', 'ep (KW)', 'Fuel consumption']].values
-y = df["Ewltp (g/km)"].values
+df = pd.read_csv("./data/data.csv") 
+x = df[['m (kg)','Mt','ec (cm3)','ep (KW)','Fuel consumption']].values
+y = df[["Ewltp (g/km)", 'Enedc (g/km)']].values
 
 # Splitting the data into training, validation, and testing sets
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
@@ -31,23 +31,28 @@ x_test = torch.from_numpy(x_test).float().to(device)
 y_test = torch.from_numpy(y_test).float().to(device)
 
 # Define the model
-class LinearRegression(nn.Module):
-    def __init__(self, input_dim, output_dim):
-        super(LinearRegression, self).__init__()
-        self.linear = nn.Linear(input_dim, output_dim)
+class NeuralNetwork(nn.Module):
+    def __init__(self, input_dim, hidden_dim, output_dim):
+        super(NeuralNetwork, self).__init__()
+        self.fc1 = nn.Linear(input_dim, hidden_dim)
+        self.relu = nn.ReLU()
+        self.fc2 = nn.Linear(hidden_dim, output_dim)
 
     def forward(self, x):
-        x = self.linear(x)
+        x = self.fc1(x)
+        x = self.relu(x)
+        x = self.fc2(x)
         return x
 
 # Initialize the model
-input_dim = 8
-output_dim = 1
-model = LinearRegression(input_dim, output_dim).to(device)
+input_dim = 5
+hidden_dim = 64
+output_dim = 2
+model = NeuralNetwork(input_dim, hidden_dim, output_dim).to(device)
 
 # Define the loss function and optimizer
 criterion = nn.MSELoss()
-optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
+optimizer = torch.optim.SGD(model.parameters(), lr=0.001)
 
 # Create TensorDatasets for training and testing
 train_data = TensorDataset(x_train, y_train)
@@ -84,10 +89,12 @@ with torch.no_grad():
     total_len = len(test_loader)
     for i, (x_batch, y_batch) in enumerate(test_loader):
         # reshape y_batch to [batch_size, 1]
-        y_batch = y_batch.reshape(-1,1)
+        y_batch = y_batch.reshape(-1,2)
         outputs = model(x_batch)
         loss = criterion(outputs, y_batch)
         total_loss += loss.item()
         total_mse += mean_squared_error(y_batch.cpu(), outputs.cpu())
         total_r2 += r2_score(y_batch.cpu(), outputs.cpu())
     print(f'R²: {total_r2/total_len:.4f}, MSE: {total_mse/total_len:.4f} and Loss: {total_loss/total_len:.4f}')
+    
+torch.save(model.state_dict(), 'model.pt')
