@@ -1,7 +1,15 @@
 version: "3"
 
 services:
-  app:
+  api:
+    image: flaskapp
+    build: .
+    ports:
+      - 3000:3000
+    volumes:
+      - ./src:/app/src
+
+  website:
     image: flaskapp
     build: .
     ports:
