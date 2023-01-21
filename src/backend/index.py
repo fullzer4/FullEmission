@@ -1,9 +1,11 @@
 import torch
 import torch.nn as nn
 from flask  import Flask, request, jsonify
+from flask_cors import CORS
 import pandas as pd
 
 app = Flask(__name__)
+CORS(app)
 
 class NeuralNetwork(nn.Module):
     def __init__(self, input_dim, hidden_dim, output_dim):
@@ -39,7 +41,6 @@ def predict():
     data = request.get_json()
     inputs = torch.tensor(data['inputs']).float()
     inputs = (inputs - x_train_mean.unsqueeze(0)) / x_train_std.unsqueeze(0)
-    print(x_train_mean)
     prediction = model(inputs)
     output = {'prediction': prediction.tolist()}
     return jsonify(output)
