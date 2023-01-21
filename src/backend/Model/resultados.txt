@@ -1,1 +1,7 @@
-Codigo: v1 | Resultados treino 1500 epochs - R²: 0.0064, MSE: 1307.8274 and Loss: 1307.8274 | pessimo
+Codigo: v0 | Resultados treino 1500 epochs - R²: 0.0064, MSE: 1307.8274 and Loss: 1307.8274 | pessimo
+Codigo: v1 | Resultados treino 1500 epochs - R²: 0.8785, MSE: 265.6917 and Loss: 265.6917 | bom
+  
+R²: 0.8589, MSE: 278.3498 and Loss: 278.3498
+
+
+CPU - R²: 0.9245, MSE: 163.4945 and Loss: 163.4945
