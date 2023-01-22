@@ -2,17 +2,17 @@ version: "3"
 
 services:
   api:
-    image: flaskapp
-    build: .
+    image: apico2emission
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     ports:
-      - 3000:3000
-    volumes:
-      - ./src:/app/src
+      - 5000:5000
 
   website:
-    image: flaskapp
-    build: .
+    image: websiteco2emission
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     ports:
       - 3000:3000
-    volumes:
-      - ./src:/app/src
