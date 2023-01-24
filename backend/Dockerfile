@@ -1,14 +1,9 @@
-FROM continuumio/miniconda3:latest
+FROM python:3.9.13
 
 WORKDIR /api
 
-COPY environment.yml ./
-RUN conda env create -f environment.yml
+RUN pip install flask flask_cors torch pandas
 
-SHELL ["conda", "run", "-n", "pytorchcpu", "/bin/bash", "-c"]
-RUN conda init bash
-RUN source activate pytorchcpu
-RUN conda info -e
 COPY . .
 
 CMD ["python", "index.py"]

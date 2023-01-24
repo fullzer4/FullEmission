@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import "./scss/index.scss"
 
 function App() {
 
@@ -24,20 +25,59 @@ function App() {
     await setOutputData(output.prediction[0]);
   }
 
+  const handleSubmit = (e:any) => {
+    e.preventDefault();
+    if (inputData.m && inputData.mt && inputData.ec && inputData.ep && inputData.fuelC) {
+      predictapi(inputData);
+    } else {
+      alert('Por favor, preencha todos os campos antes de continuar.');
+    }
+  }
+
   return (
     <div className="Predict">
-      <form>
-        <input type="number" onChange={(e) => setInputData({...inputData, m: Number(e.target.value)})}/>
-        <input type="number" onChange={(e) => setInputData({...inputData, mt: Number(e.target.value)})}/>
-        <input type="number" onChange={(e) => setInputData({...inputData, ec: Number(e.target.value)})}/>
-        <input type="number" onChange={(e) => setInputData({...inputData, ep: Number(e.target.value)})}/>
-        <input type="number" onChange={(e) => setInputData({...inputData, fuelC: Number(e.target.value)})}/>
+      <div className="text">
+
+        <h1>Car CO2 Emission</h1>
+        <p></p>
+
+      </div>
+
+      <form className='inputs'>
+
+        <input type="number" onChange={(e) => {
+          if(e.target.value) setInputData({...inputData, m: Number(e.target.value)}); 
+          else setInputData({...inputData, m: 0});
+        }}/>
+        <input type="number" onChange={(e) => {
+          if(e.target.value) setInputData({...inputData, mt: Number(e.target.value)}); 
+          else setInputData({...inputData, mt: 0});
+        }}/>
+        <input type="number" onChange={(e) => {
+          if(e.target.value) setInputData({...inputData, ec: Number(e.target.value)}); 
+          else setInputData({...inputData, ec: 0});
+        }}/>
+        <input type="number" onChange={(e) => {
+          if(e.target.value) setInputData({...inputData, ep: Number(e.target.value)}); 
+          else setInputData({...inputData, ep: 0});
+        }}/>
+        <input type="number" onChange={(e) => {
+          if(e.target.value) setInputData({...inputData, fuelC: Number(e.target.value)}); 
+          else setInputData({...inputData, fuelC: 0});
+        }}/>
+
+        <input type="button" onClick={handleSubmit}></input>
+
       </form>
-      <button onClick={() => predictapi(inputData)}>Clique para prever</button>
 
-      {outputData[0] && <div className="">Ewltp: {outputData[0]}</div>}
-      {outputData[1] && <div className="">Enedc: {outputData[1]}</div>}
+      <div className="output">
 
+        <h2>Result</h2>
+
+        {outputData[0] && <p className="">Ewltp: {outputData[0]}</p>}
+        {outputData[1] && <p className="">Enedc: {outputData[1]}</p>}
+
+      </div>
     </div>
   )
 }
