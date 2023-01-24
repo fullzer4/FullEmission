@@ -3,6 +3,7 @@ import torch.nn as nn
 from flask  import Flask, request, jsonify
 from flask_cors import CORS
 import pandas as pd
+import json
 
 app = Flask(__name__)
 CORS(app)
@@ -20,14 +21,10 @@ class NeuralNetwork(nn.Module):
         x = self.fc2(x)
         return x
 
-# Load the saved model
-
-df = pd.read_csv("./data/data.csv") 
-x_train_mean = df[['m (kg)','Mt','ec (cm3)','ep (KW)','Fuel consumption']].mean()
-x_train_std = df[['m (kg)','Mt','ec (cm3)','ep (KW)','Fuel consumption']].std()
-
-x_train_mean = torch.tensor(x_train_mean, dtype=torch.float)
-x_train_std = torch.tensor(x_train_std, dtype=torch.float)
+with open('values.json', 'r') as f:
+    data = json.load(f)
+x_train_mean = torch.tensor(data['x_train_mean'], dtype=torch.float)
+x_train_std = torch.tensor(data['x_train_std'], dtype=torch.float)
 
 input_dim = 5
 hidden_dim = 64

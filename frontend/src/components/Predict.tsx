@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import "./scss/index.scss"
 
-function App() {
+function Predict() {
 
   interface InputTypes{
     m: number;
@@ -82,4 +81,4 @@ function App() {
   )
 }
 
-export default App
+export default Predict
