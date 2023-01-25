@@ -12,53 +12,5 @@ body{
         min-height: 100vh;
         min-width: 100%;
     }
-    
-    .Predict{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-around;
-        height: 100vh;
-        max-height: 100%;
-
-        .inputs{
-            /* Estilo geral do input */
-            input[type="number"] {
-                padding: 12px 20px;
-                font-size: 16px;
-                border-radius: 25px;
-                border: 2px solid #3c3c3c;
-                box-sizing: border-box;
-                width: 80%;
-                margin-top: 10px;
-            }
-    
-                /* Estilo quando o input estiver em foco */
-            input[type="number"]:focus {
-                border: 2px solid #6CA0DC;
-                outline: none;
-            }
-    
-                /* Estilo do botão enviar */
-            input[type="button"] {
-                background-color: #6CA0DC;
-                color: white;
-                padding: 12px 20px;
-                font-size: 16px;
-                border-radius: 25px;
-                border: none;
-                cursor: pointer;
-                width: 20%;
-                margin-top: 10px;
-                margin-left: 10px;
-            }
-    
-            /* Estilo quando o botão for pressionado */
-            input[type="button"]:active {
-                background-color: #3c3c3c;
-            }
-
-        }
-    }
 
 }

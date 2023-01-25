@@ -1,0 +1,67 @@
+[class*='wave-'] {
+    animation: wave-animation 15s ease-in-out infinite;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[class*='waveC-'] {
+    animation: wave-animation-reverse 15s ease-in-out infinite;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[class*='1'] {
+    animation-delay: -1s;
+    animation-duration: 14s;
+}
+
+[class*='2'] {
+    animation-delay: -2s;
+    animation-duration: 15s;
+}
+
+[class*='3'] {
+    animation-delay: -3s;
+    animation-duration: 16s;
+}
+
+[class*='4'] {
+    animation-delay: -4s;
+    animation-duration: 17s;
+}
+
+[class*='5'] {
+    animation-delay: -5s;
+    animation-duration: 18s;
+}
+
+[class*='6'] {
+    animation-delay: -6s;
+    animation-duration: 19s;
+}
+
+[class*='7'] {
+    animation-delay: -7s;
+    animation-duration: 20s;
+}
+
+[class*='8'] {
+    animation-delay: -8s;
+    animation-duration: 21s;
+}
+
+@keyframes wave-animation {
+    from {
+        transform: translateX(0%);
+    }
+    to {
+        transform: translateX(100%);
+    }
+}
+
+@keyframes wave-animation-reverse {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0%);
+    }
+}

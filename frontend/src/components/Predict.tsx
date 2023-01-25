@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import "../scss/Predict.scss"
+
 
 function Predict() {
 
@@ -37,8 +39,8 @@ function Predict() {
     <div className="Predict">
       <div className="text">
 
-        <h1>Car CO2 Emission</h1>
-        <p></p>
+        <h1>AI for Car CO2 Emission</h1>
+        <p>Neural Newtwork</p>
 
       </div>
 
