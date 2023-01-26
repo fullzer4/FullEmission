@@ -1,11 +1,9 @@
 [class*='wave-'] {
     animation: wave-animation 15s ease-in-out infinite;
-    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 [class*='waveC-'] {
     animation: wave-animation-reverse 15s ease-in-out infinite;
-    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 [class*='1'] {
@@ -49,19 +47,25 @@
 }
 
 @keyframes wave-animation {
-    from {
+    0% {
         transform: translateX(0%);
     }
-    to {
+    50% {
         transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(0%);
     }
 }
 
 @keyframes wave-animation-reverse {
-    from {
+    0% {
         transform: translateX(-100%);
     }
-    to {
+    50% {
         transform: translateX(0%);
+    }
+    100% {
+        transform: translateX(-100%);
     }
 }
