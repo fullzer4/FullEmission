@@ -10,42 +10,83 @@
     width: 100%;
     z-index: 10;
 
-    .inputs{
-        /* Estilo geral do input */
-        input[type="number"] {
-            padding: 12px 20px;
-            font-size: 16px;
-            border-radius: 25px;
-            border: 2px solid #3c3c3c;
-            box-sizing: border-box;
-            width: 80%;
-            margin-top: 10px;
+    .text{
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        width: 100%;
+
+        h1{
+            font-family: 'Montserrat';
+            font-style: normal;
+            font-weight: 400;
+            font-size: 3.5rem;
+            line-height: 63px;
+            color: #FFFFFF;
         }
 
-            /* Estilo quando o input estiver em foco */
-        input[type="number"]:focus {
-            border: 2px solid #6CA0DC;
-            outline: none;
-        }
-
-            /* Estilo do botão enviar */
-        input[type="button"] {
-            background-color: #6CA0DC;
-            color: white;
-            padding: 12px 20px;
-            font-size: 16px;
-            border-radius: 25px;
-            border: none;
-            cursor: pointer;
-            width: 20%;
-            margin-top: 10px;
-            margin-left: 10px;
-        }
-
-        /* Estilo quando o botão for pressionado */
-        input[type="button"]:active {
-            background-color: #3c3c3c;
+        p{
+            font-family: 'Montserrat';
+            font-style: normal;
+            font-weight: 200;
+            font-size: 1.5rem;
+            color: #FFFFFF;
         }
 
     }
+
+    .inputs{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4vh;
+        width: 100%;
+        
+        .boxinputs{
+            display: flex;
+            flex-direction: row;
+            gap: 5vw;
+        }
+    }
+
+    
+}
+
+/* Estilo geral do input */
+input[type="number"] {
+    background: rgba(26, 23, 23, 0.52);
+    color: #FFFFFF;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.096);
+    border-radius: 15px;
+    height: calc(3rem + 10%);
+    width: calc(21rem + 10%);
+    padding: 15px;
+    font-size: 1rem;
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 300;
+    font-size: 1rem;
+    color: #FFFFFF;
+    transition: 1s;
+}
+
+            /* Estilo quando o input estiver em foco */
+input[type="number"]:focus {
+    border-bottom: 2px solid rgba(255, 255, 255, 0.37);
+    outline: none;
+}
+
+            /* Estilo do botão enviar */
+button {
+    color: #FFFFFF;
+    background: rgba(26, 23, 23, 0.52);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.11);
+    border-radius: 15px;
+    height: 3rem;
+    width: 9rem;
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 300;
+    font-size: 1rem;
+    color: #FFFFFF;
 }

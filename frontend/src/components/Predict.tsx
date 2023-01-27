@@ -4,7 +4,7 @@ import "../scss/Predict.scss"
 
 function Predict() {
 
-  interface InputTypes{
+  interface InputTypes {
     m: number;
     mt: number;
     ec: number;
@@ -26,7 +26,7 @@ function Predict() {
     await setOutputData(output.prediction[0]);
   }
 
-  const handleSubmit = (e:any) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     if (inputData.m && inputData.mt && inputData.ec && inputData.ep && inputData.fuelC) {
       predictapi(inputData);
@@ -40,34 +40,39 @@ function Predict() {
       <div className="text">
 
         <h1>AI for Car CO2 Emission</h1>
-        <p>Neural Newtwork</p>
+        <p>Neural Network made with pytorch and python <br/>The algorithm return Ewltp and Enedc values </p>
 
       </div>
 
       <form className='inputs'>
+        <div className='boxinputs'>
+          <input type="number" placeholder='Weight (Kg)' onChange={(e) => {
+            if (e.target.value) setInputData({ ...inputData, m: Number(e.target.value) });
+            else setInputData({ ...inputData, m: 0 });
+          }} />
+          <input type="number" placeholder='Total weight (Kg)' onChange={(e) => {
+            if (e.target.value) setInputData({ ...inputData, mt: Number(e.target.value) });
+            else setInputData({ ...inputData, mt: 0 });
+          }} />
+        </div>
+        <div className='boxinputs'>
+          <input type="number" placeholder='Engine displacement (cm3) ' onChange={(e) => {
+            if (e.target.value) setInputData({ ...inputData, ec: Number(e.target.value) });
+            else setInputData({ ...inputData, ec: 0 });
+          }} />
+          <input type="number" placeholder="Engine power (KW)" onChange={(e) => {
+            if (e.target.value) setInputData({ ...inputData, ep: Number(e.target.value) });
+            else setInputData({ ...inputData, ep: 0 });
+          }} />
+        </div>
+        <div className='boxinputs'>
+          <input type="number" placeholder='Fuel consumption (L / 10Km)' onChange={(e) => {
+            if (e.target.value) setInputData({ ...inputData, fuelC: Number(e.target.value) });
+            else setInputData({ ...inputData, fuelC: 0 });
+            }} />
+        </div>
 
-        <input type="number" onChange={(e) => {
-          if(e.target.value) setInputData({...inputData, m: Number(e.target.value)}); 
-          else setInputData({...inputData, m: 0});
-        }}/>
-        <input type="number" onChange={(e) => {
-          if(e.target.value) setInputData({...inputData, mt: Number(e.target.value)}); 
-          else setInputData({...inputData, mt: 0});
-        }}/>
-        <input type="number" onChange={(e) => {
-          if(e.target.value) setInputData({...inputData, ec: Number(e.target.value)}); 
-          else setInputData({...inputData, ec: 0});
-        }}/>
-        <input type="number" onChange={(e) => {
-          if(e.target.value) setInputData({...inputData, ep: Number(e.target.value)}); 
-          else setInputData({...inputData, ep: 0});
-        }}/>
-        <input type="number" onChange={(e) => {
-          if(e.target.value) setInputData({...inputData, fuelC: Number(e.target.value)}); 
-          else setInputData({...inputData, fuelC: 0});
-        }}/>
-
-        <input type="button" onClick={handleSubmit}></input>
+        <button onClick={handleSubmit}>Calculate</button>
 
       </form>
 
