@@ -14,6 +14,9 @@ function Predict() {
 
   const [inputData, setInputData] = useState<InputTypes>({ m: 0, mt: 0, ec: 0, ep: 0, fuelC: 0 });
   const [outputData, setOutputData] = useState<Array<number>>([]);
+  const [form, setForm] = useState("inputs");
+  const [result, setResult] = useState("result");
+  const [again, setAgain] = useState("again");
 
   const predictapi = async (inputData: InputTypes) => {
     const inputs = [inputData.m, inputData.mt, inputData.ec, inputData.ep, inputData.fuelC];
@@ -29,10 +32,27 @@ function Predict() {
   const handleSubmit = (e: any) => {
     e.preventDefault();
     if (inputData.m && inputData.mt && inputData.ec && inputData.ep && inputData.fuelC) {
+      setForm("inputs Ishow")
+      setResult("result Rshow")
+      setAgain("again Ashow")
       predictapi(inputData);
     } else {
       alert('Por favor, preencha todos os campos antes de continuar.');
     }
+  }
+
+  const reset = (e: any) => {
+    e.preventDefault();
+    setInputData({ m: 0, mt: 0, ec: 0, ep: 0, fuelC: 0 });
+    setOutputData([]);
+    setForm("inputs");
+    setResult("result");
+    setAgain("again");
+    document.querySelectorAll('.input').forEach(input => {
+      if (input instanceof HTMLInputElement) {
+        input.value = '';
+      }
+    });
   }
 
   return (
@@ -44,29 +64,29 @@ function Predict() {
 
       </div>
 
-      <form className='inputs'>
+      <form className={form}>
         <div className='boxinputs'>
-          <input type="number" placeholder='Weight (Kg)' onChange={(e) => {
+          <input className='input' type="number" placeholder='Weight (Kg)' onChange={(e) => {
             if (e.target.value) setInputData({ ...inputData, m: Number(e.target.value) });
             else setInputData({ ...inputData, m: 0 });
           }} />
-          <input type="number" placeholder='Total weight (Kg)' onChange={(e) => {
+          <input className='input' type="number" placeholder='Total weight (Kg)' onChange={(e) => {
             if (e.target.value) setInputData({ ...inputData, mt: Number(e.target.value) });
             else setInputData({ ...inputData, mt: 0 });
           }} />
         </div>
         <div className='boxinputs'>
-          <input type="number" placeholder='Engine displacement (cm3) ' onChange={(e) => {
+          <input className='input' type="number" placeholder='Engine displacement (cm3) ' onChange={(e) => {
             if (e.target.value) setInputData({ ...inputData, ec: Number(e.target.value) });
             else setInputData({ ...inputData, ec: 0 });
           }} />
-          <input type="number" placeholder="Engine power (KW)" onChange={(e) => {
+          <input className='input' type="number" placeholder="Engine power (KW)" onChange={(e) => {
             if (e.target.value) setInputData({ ...inputData, ep: Number(e.target.value) });
             else setInputData({ ...inputData, ep: 0 });
           }} />
         </div>
         <div className='boxinputs'>
-          <input type="number" placeholder='Fuel consumption (L / 10Km)' onChange={(e) => {
+          <input className='input' type="number" placeholder='Fuel consumption (L / 10Km)' onChange={(e) => {
             if (e.target.value) setInputData({ ...inputData, fuelC: Number(e.target.value) });
             else setInputData({ ...inputData, fuelC: 0 });
             }} />
@@ -76,12 +96,24 @@ function Predict() {
 
       </form>
 
-      <div className="output">
+      <div className={result}>
 
-        <h2>Result</h2>
+          <div>
 
-        {outputData[0] && <p className="">Ewltp: {outputData[0]}</p>}
-        {outputData[1] && <p className="">Enedc: {outputData[1]}</p>}
+            <p>Results:</p>
+            
+            <div>
+              <p className="">Ewltp: {outputData[0]}</p>
+              <p className="">Enedc: {outputData[1]}</p>
+            </div>
+
+          </div>
+
+      </div>
+
+      <div className={again}>
+            
+            <button onClick={reset}>Reset</button>
 
       </div>
     </div>

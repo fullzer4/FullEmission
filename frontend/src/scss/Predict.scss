@@ -90,3 +90,60 @@ button {
     font-size: 1rem;
     color: #FFFFFF;
 }
+
+.Ishow{
+    button{
+        display: none;
+    }
+}
+
+.result{
+    div{
+
+        display: none;
+
+        p{
+            font-family: 'Montserrat';
+            font-style: normal;
+            font-weight: 300;
+            font-size: 2rem;
+            color: #FFFFFF;
+        }
+
+        div{
+            gap: 15px;
+            p{
+                font-weight: 200;
+                font-size: 1.5rem;
+            }
+        }
+
+    }
+}
+
+.Rshow{
+    div{
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+    }
+}
+
+.again{
+    position: absolute;
+    bottom: 2%;
+    right: 2%;
+    
+    button{
+        display: none;
+    }
+}
+
+.Ashow{
+    button{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 6rem;
+    }
+}
