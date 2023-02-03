@@ -17,6 +17,8 @@ function Predict() {
   const [form, setForm] = useState("inputs");
   const [result, setResult] = useState("result");
   const [again, setAgain] = useState("again");
+  const [ewltp, setEwltp] = useState(0);
+  const [enedc, setEnedc] = useState(0);
 
   const predictapi = async (inputData: InputTypes) => {
     const inputs = [inputData.m, inputData.mt, inputData.ec, inputData.ep, inputData.fuelC];
@@ -27,17 +29,19 @@ function Predict() {
     });
     const output = await response.json();
     await setOutputData(output.prediction[0]);
+
   }
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     if (inputData.m && inputData.mt && inputData.ec && inputData.ep && inputData.fuelC) {
-      setForm("inputs Ishow")
-      setResult("result Rshow")
-      setAgain("again Ashow")
-      predictapi(inputData);
+      setForm("inputs Ishow");
+      setResult("result Rshow");
+      setAgain("again Ashow");
+      await predictapi(inputData);
+      
     } else {
-      alert('Por favor, preencha todos os campos antes de continuar.');
+      alert('Please fill in all fields before continuing.');
     }
   }
 
