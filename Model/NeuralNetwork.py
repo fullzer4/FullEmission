@@ -35,40 +35,56 @@ with open("../backend/values.json", "w") as f:
     json.dump(vars, f)
 
 class NeuralNetwork(nn.Module):
-    def __init__(self, input_dim, hidden_dim, output_dim):
+    def __init__(self, input_dim, hidden_dim1, hidden_dim2, output_dim):
         super(NeuralNetwork, self).__init__()
-        self.fc1 = nn.Linear(input_dim, hidden_dim)
-        self.relu = nn.ReLU()
-        self.fc2 = nn.Linear(hidden_dim, output_dim)
+        self.fc1 = nn.Linear(input_dim, hidden_dim1)
+        self.relu1 = nn.ReLU()
+        self.fc2 = nn.Linear(hidden_dim1, hidden_dim2)
+        self.relu2 = nn.ReLU()
+        self.fc3 = nn.Linear(hidden_dim2, output_dim)
 
     def forward(self, x):
         x = self.fc1(x)
-        x = self.relu(x)
+        x = self.relu1(x)
         x = self.fc2(x)
+        x = self.relu2(x)
+        x = self.fc3(x)
         return x
 
 input_dim = 5
-hidden_dim = 64
+hidden_dim1 = 64
+hidden_dim2 = 64
 output_dim = 2
-model = NeuralNetwork(input_dim, hidden_dim, output_dim).to(device)
+model = NeuralNetwork(input_dim, hidden_dim1, hidden_dim2, output_dim).to(device)
 
 criterion = nn.MSELoss()
+reg = nn.L1Loss()
+
+def regularization(model, reg_lambda):
+    reg_loss = 0
+    for param in model.parameters():
+        reg_loss += reg(param, torch.zeros_like(param))
+    return reg_loss * reg_lambda
+
+reg_lambda = 0.001
 optimizer = torch.optim.SGD(model.parameters(), lr=0.001)
 
 train_data = TensorDataset(x_train, y_train)
 test_data = TensorDataset(x_test, y_test)
 
-batch_size = 32
+batch_size = 64 # 32
 
 train_loader = DataLoader(train_data, batch_size=batch_size, shuffle=True)
 test_loader = DataLoader(test_data, batch_size=batch_size, shuffle=True)
 
-num_epochs = 1500
+num_epochs = 15000
 for epoch in range(num_epochs):
     for i, (x_batch, y_batch) in enumerate(train_loader):
 
         outputs = model(x_batch)
         loss = criterion(outputs, y_batch)
+        reg_loss = regularization(model, reg_lambda)
+        loss += reg_loss
 
         optimizer.zero_grad()
         loss.backward()
